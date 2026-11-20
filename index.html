@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>总车长与轴距的关系 · 比例系数 C</title>
+<style>
+:root{color-scheme:dark;--bg:#101722;--panel:#182230;--panel2:#1e2b3b;--line:#344357;--text:#edf3fa;--muted:#b2c0d1;--blue:#7ab9ff;--cyan:#5ce0ca;--amber:#f5c66b;--red:#ff9389;--radius:15px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 "Microsoft YaHei","PingFang SC",system-ui,sans-serif}h1,h2,h3,p{margin:0}h1{font-size:clamp(26px,3vw,36px);line-height:1.4}h2{font-size:19px}h3{font-size:17px}button,input,summary{font:inherit}button,summary{cursor:pointer}button,a,input,summary:focus-visible{-webkit-tap-highlight-color:transparent}button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}a{color:var(--blue);text-underline-offset:4px}.wrap{max-width:1480px;padding:30px 28px 36px;margin:auto}.head{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:23px}.eyebrow{font-size:14px;letter-spacing:.1em;color:var(--cyan);margin-bottom:9px}.subtitle{color:var(--muted);margin-top:8px}.actions{display:flex;flex-wrap:wrap;gap:8px;flex-shrink:0}.btn{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:8px;color:var(--text);padding:9px 14px;line-height:1.5;font-size:14px;text-decoration:none}.btn:hover{border-color:var(--blue);background:#27394d}.btn.primary{border-color:#397a77;color:var(--cyan);background:#1a363b}.btn:disabled{opacity:.4;cursor:default}.formula-banner{background:#172638;border:1px solid #38546c;border-left:4px solid var(--blue);border-radius:12px;display:grid;grid-template-columns:1.05fr 1fr;gap:24px;align-items:center;padding:20px 23px;margin-bottom:21px}.formula-banner>div{min-width:0}.formula-source{font-size:13px;color:var(--blue);margin-bottom:7px}.formula{font:29px/1.4 Cambria,"Times New Roman",serif;display:flex;gap:22px;flex-wrap:wrap;align-items:center}.formula .secondary{font-size:23px;color:var(--cyan)}.fraction{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.8em;line-height:1.35;margin:0 4px}.fraction span:first-child{border-bottom:1px solid currentColor;padding:0 7px 3px}.fraction span:last-child{padding:3px 7px 0}.formula-note{font-size:14px;color:var(--muted);border-left:1px solid var(--line);padding-left:24px}.formula-note strong{color:var(--text)}.workspace{display:grid;grid-template-columns:322px minmax(0,1fr);gap:20px;align-items:start}.card{min-width:0;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);padding:21px}.small{font-size:14px;color:var(--muted)}.hint{font-size:13px;color:var(--muted);line-height:1.75;margin-top:11px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:14px}.section-head p{font-size:14px;color:var(--muted);margin-top:4px}.mode-buttons{display:grid;gap:9px;margin:15px 0 12px}.mode-btn{border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:9px;padding:12px 13px;font-size:15px;text-align:left}.mode-btn strong{display:block;font-size:16px}.mode-btn span{display:block;font-size:13px;color:var(--muted);margin-top:3px}.mode-btn[aria-pressed=true]{border-color:var(--cyan);background:#20383d;box-shadow:inset 0 0 0 1px #5ce0ca55}.rule{border:0;border-top:1px solid var(--line);margin:21px 0}.label-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:16px 0 10px}.label-row label{font-weight:600;font-size:16px}.number-unit{display:flex;align-items:center;gap:7px;font-size:14px;color:var(--muted)}input[type=number]{min-width:0;width:100px;padding:8px 7px;background:var(--bg);border:1px solid #52627a;border-radius:7px;color:var(--text);font-size:19px;text-align:right;font-variant-numeric:tabular-nums}input[type=number][aria-invalid=true]{border-color:var(--red);outline:1px solid var(--red)}#coefficientInput{width:100px;color:var(--cyan)}input[type=range]{display:block;width:100%;height:25px;margin:8px 0;accent-color:var(--cyan);cursor:ew-resize}.range-labels{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}.coefficient-scale{height:9px;position:relative;background:var(--bg);border-radius:5px;margin:14px 0 9px}.scale-general{position:absolute;left:23.333333%;width:46.666667%;height:100%;background:#526279}.scale-fr,.scale-ff{position:absolute;height:100%;top:0}.scale-fr{left:23.333333%;width:13.333333%;background:var(--amber)}.scale-ff{left:56.666667%;width:13.333333%;background:var(--blue)}#cMarker{position:absolute;left:63.3333%;top:-4px;width:3px;height:17px;background:white;transform:translateX(-50%);border-radius:2px}.legend{display:flex;flex-wrap:wrap;gap:8px 16px;color:var(--muted);font-size:13px}.dot{display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--blue);margin-right:6px}.dot.fr{background:var(--amber)}.dot.wheelbase{background:var(--cyan)}.dot.front{background:#7ab9ff}.dot.rear{background:#f5c66b}.quick-c{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}.quick-c button{text-align:left;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:10px;font-size:14px}.quick-c strong{display:block;font:18px/1.4 Consolas,monospace}.quick-c span{display:block;font-size:13px;margin-top:3px;color:var(--muted)}.quick-c button:hover{border-color:var(--blue)}.quick-c button[aria-pressed=true]{border-color:var(--blue);background:#20354c}.quick-c button[data-c="0.54"][aria-pressed=true]{border-color:var(--amber);background:#373226}.c-status{font-size:14px;color:var(--blue);background:var(--bg);border-radius:7px;padding:10px 12px;margin-top:13px}.split-controls summary{font-size:15px;font-weight:600}.error{font-size:14px;color:var(--red);margin-top:12px}.main{min-width:0;display:grid;gap:17px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.metric{padding:18px 19px;border-top:3px solid var(--line)}.metric.known{border-top-color:var(--blue)}.metric.result{border-top-color:var(--cyan)}.metric .label{font-size:14px;color:var(--muted)}.metric .value{font:600 clamp(25px,2.6vw,37px)/1.3 Consolas,monospace;color:var(--text);margin:6px 0}.metric.result .value{color:var(--cyan)}.metric .unit{font-size:15px;font-weight:400;color:var(--muted);margin-left:5px}.metric .context{font-size:13px;color:var(--muted)}.diagram-head{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px}.pill{font-size:14px;color:var(--cyan);padding:5px 11px;background:#20383d;border:1px solid #397a77;border-radius:7px;white-space:nowrap}.visual-scroll{width:100%;min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}.car{width:100%;display:block;height:auto;margin:8px 0}.chart{width:100%;height:auto;display:block;margin-top:8px}.car text,.chart text{font-family:"Microsoft YaHei",sans-serif}.scroll-hint{display:none}.sum-line{border-top:1px solid var(--line);padding-top:13px;color:var(--muted);font-size:15px}.sum-line strong{color:var(--text)}.parts-bar{display:flex;height:12px;border-radius:6px;overflow:hidden;margin:14px 0 9px}.parts-bar span:nth-child(1){background:var(--blue)}.parts-bar span:nth-child(2){background:var(--cyan)}.parts-bar span:nth-child(3){background:var(--amber)}.parts-labels{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted)}.analysis{display:grid;grid-template-columns:1.12fr 1fr;gap:17px}.live-formula{background:var(--bg);padding:12px;border-radius:8px;font:15px/1.8 Consolas,"Microsoft YaHei",monospace;color:var(--cyan);margin:15px 0;overflow-wrap:anywhere}.insight h3{color:var(--cyan);margin-bottom:9px}.insight p{color:var(--muted);font-size:15px}.insight strong{color:var(--text)}.change-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.change-box{border:1px solid var(--line);border-radius:8px;padding:11px;font-size:14px;color:var(--muted)}.change-box b{display:block;color:var(--text);font:17px/1.6 Consolas,monospace}.references{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:21px}.reference.fr{border-top:3px solid var(--amber)}.reference.ff{border-top:3px solid var(--blue)}.reference .tag{font-size:13px;color:var(--amber);margin-bottom:4px}.reference.ff .tag{color:var(--blue)}.reference h2{margin-bottom:8px}.reference p{font-size:15px;color:var(--muted)}.reference .range-result{font:22px/1.5 Consolas,"Microsoft YaHei",monospace;color:var(--text);margin:12px 0 7px}.reading-note{font-size:14px;color:var(--muted);margin:12px 2px 20px}.two-tables{display:grid;grid-template-columns:1fr;gap:18px;margin-top:20px}.table-scroll{overflow-x:auto;max-width:100%}table{width:100%;border-collapse:collapse;white-space:nowrap;text-align:left;font-size:14px}th,td{padding:11px 13px;border-bottom:1px solid var(--line)}th{font-weight:500;background:var(--bg);color:var(--muted)}td{font-variant-numeric:tabular-nums}tr.current td{background:#213d41;color:#8ce8d7}.table-btn{background:transparent;border:1px solid var(--line);color:var(--text);padding:4px 9px;border-radius:6px;font-size:13px}.table-btn:hover{border-color:var(--cyan)}.empty{text-align:center;color:var(--muted);padding:23px 12px}.record-actions{display:flex;gap:8px;flex-wrap:wrap}.learning{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:20px;background:var(--panel)}.learning>div{padding:18px 21px;min-width:0}.learning>div+div{border-left:1px solid var(--line)}.learning h3{font-size:16px;color:var(--cyan);margin-bottom:6px}.learning p{font-size:14px;color:var(--muted)}.model{margin-top:20px}.model summary{font-size:17px;font-weight:600}.model-body{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:17px}.model-body p,.model-body li{font-size:14px;color:var(--muted)}.model-body p+p{margin-top:10px}.model-body h3{font-size:16px;margin-bottom:8px}.model-body ul{padding-left:20px;margin:6px 0}.footer{margin-top:24px;text-align:center;color:var(--muted);font-size:13px}[hidden]{display:none!important}
+@media(max-width:1100px){.wrap{padding:24px 20px}.head{align-items:flex-start}.head .actions{max-width:190px}.workspace{grid-template-columns:280px minmax(0,1fr);gap:16px}.card{padding:17px}.analysis{grid-template-columns:1fr}.metric{padding:15px 13px}.metric .value{font-size:27px}.formula-banner{grid-template-columns:1fr;gap:13px}.formula-note{border-left:0;border-top:1px solid var(--line);padding:12px 0 0}.diagram-head{flex-wrap:wrap}}
+@media(max-width:760px){.wrap{padding:22px 14px}.head{display:block}.head .actions{max-width:none;margin-top:15px}.workspace,.references,.model-body{grid-template-columns:1fr}.formula-banner{padding:17px}.formula{font-size:27px;gap:12px}.formula .secondary{font-size:21px}.metrics{gap:9px}.metric{padding:13px 10px}.metric .label{font-size:13px}.metric .value{font-size:23px}.metric .unit{display:block;font-size:13px;margin-left:0}.metric .context{font-size:12px}.car{min-width:760px}.chart{min-width:480px}.scroll-hint{display:block;color:var(--muted);font-size:13px;margin-top:8px}.learning{grid-template-columns:1fr}.learning>div+div{border-left:0;border-top:1px solid var(--line)}.section-head{flex-wrap:wrap;align-items:flex-start}.parts-labels{font-size:12px;gap:5px}.sum-line{font-size:14px}.references{gap:14px}.reference .range-result{font-size:20px}}
+@media(max-width:380px){.metrics{grid-template-columns:1fr}.metric{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:0 10px}.metric .value{grid-column:2;grid-row:1/3;margin:0;text-align:right;font-size:26px}.metric .unit{display:inline}.metric .context{grid-column:1;grid-row:2}.formula{gap:10px}.formula .secondary{font-size:20px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{:root{color-scheme:light;--text:#142232;--muted:#465d72;--line:#b2beca;--bg:#fff;--panel:#fff;--panel2:#eff4f7;--cyan:#126655;--blue:#195c9e;--amber:#8a5610}.wrap{max-width:none;padding:0}.head{margin-bottom:12px}.actions,.record-actions,.no-print,input[type=range],.scroll-hint{display:none!important}.workspace{grid-template-columns:235px 1fr;gap:12px}.card{padding:12px;break-inside:avoid}.formula-banner{background:#f4f8fb;grid-template-columns:1fr 1fr;padding:12px}.formula-note{border:0;padding:0}.formula{font-size:23px}.formula .secondary{font-size:19px}.mode-btn{color:#142232;background:#fff}.mode-btn[aria-pressed=true]{background:#e6f4f0}.c-status,.live-formula{background:#edf4f7}.metrics{gap:8px}.metric{padding:10px}.metric .value{font-size:23px}.analysis{grid-template-columns:1fr}.main{gap:12px}.car,.chart{min-width:0;background:#152030;print-color-adjust:exact;-webkit-print-color-adjust:exact}.parts-bar,.coefficient-scale{print-color-adjust:exact;-webkit-print-color-adjust:exact}.quick-c button{color:#142232;background:white}.quick-c button[aria-pressed=true]{background:#edf4f7}.pill{color:#126655;background:#ecf6f2}input[type=number]{color:#142232;background:white}.references{gap:12px}.reference .range-result{font-size:19px}.learning{break-inside:avoid}.model-body{grid-template-columns:1fr 1fr}.table-btn{display:none}.hint,.small{font-size:11px}a{color:#195c9e}}
+</style>
+<script>
+/* ── 源码保护（基础版）：禁用右键 + F12 / Ctrl+U / Ctrl+Shift+I,J,C / Ctrl+S，不影响输入与打印 ── */
+(function(){
+  "use strict";
+  var tt=null;
+  function toast(msg){
+    var t=document.getElementById("__src_guard_toast__");
+    if(!t){
+      t=document.createElement("div");
+      t.id="__src_guard_toast__";
+      t.style.cssText="position:fixed;left:50%;top:22px;transform:translateX(-50%);"+
+        "z-index:2147483647;background:rgba(24,12,10,.94);color:#ffd7cf;"+
+        "border:1px solid #ff9389;padding:10px 20px;border-radius:10px;"+
+        "font:700 15px/1.4 'Microsoft YaHei',sans-serif;"+
+        "box-shadow:0 6px 24px rgba(0,0,0,.5);pointer-events:none;"+
+        "opacity:0;transition:opacity .18s;white-space:nowrap;";
+      (document.body||document.documentElement).appendChild(t);
+    }
+    t.textContent=msg;t.style.opacity="1";
+    clearTimeout(tt);tt=setTimeout(function(){t.style.opacity="0";},1400);
+  }
+  document.addEventListener("contextmenu",function(e){
+    e.preventDefault();toast("⚠ 已禁用右键菜单");
+  },true);
+  document.addEventListener("keydown",function(e){
+    var k=(e.key||"").toLowerCase(),ctrl=e.ctrlKey||e.metaKey,hit=false;
+    if(k==="f12") hit=true;
+    else if(ctrl&&e.shiftKey&&(k==="i"||k==="j"||k==="c")) hit=true;
+    else if(ctrl&&k==="u") hit=true;
+    else if(ctrl&&k==="s") hit=true;
+    if(hit){e.preventDefault();e.stopPropagation();toast("⚠ 已禁用该操作");return false;}
+  },true);
+})();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div><div class="eyebrow">《汽车设计》课中认知探究工具 · 第1章 汽车总体设计</div><h1>总车长与轴距的关系</h1><p class="subtitle">调整比例系数 C，观察轴距占比与前、后悬总长的变化。</p></div>
+    <nav class="actions" aria-label="页面操作"><a class="btn" href="#references">教材参考范围</a><button class="btn" id="resetBtn">恢复初始参数</button><button class="btn" id="printBtn">打印实验页</button></nav>
+  </header>
+
+  <section class="formula-banner" aria-label="教材第18页公式">
+    <div><div class="formula-source">《汽车设计》第5版 · 印刷第18页 · 乘用车尺寸比例</div><div class="formula"><span>Lₐ = <span class="fraction"><span>L</span><span>C</span></span></span><span class="secondary">C = <span class="fraction"><span>L</span><span>Lₐ</span></span></span><span class="secondary">L = C · Lₐ</span></div></div>
+    <div class="formula-note"><strong>Lₐ</strong>：总车长；<strong>L</strong>：轴距；<strong>C</strong>：无量纲比例系数。<br><strong>C = 0.64</strong> 表示轴距占总车长的 <strong>64%</strong>。<br>尺寸分解：Lₐ = 前悬 Lꜰ + 轴距 L + 后悬 Lʀ。</div>
+  </section>
+
+  <div class="workspace">
+    <aside class="card controls" aria-label="试验设置">
+      <h2>选择探究方式</h2>
+      <div class="mode-buttons"><button class="mode-btn" data-mode="length" aria-pressed="true"><strong>固定总车长，看轴距变化</strong><span>已知 Lₐ，调整 C，计算 L = C · Lₐ</span></button><button class="mode-btn" data-mode="wheelbase" aria-pressed="false"><strong>固定轴距，看车长变化</strong><span>已知 L，调整 C，计算 Lₐ = L / C</span></button></div>
+      <p class="hint">切换方式时保留当前几何尺寸。下方已知尺寸也可修改，用于比较不同大小的车辆。</p>
+      <hr class="rule">
+      <div class="label-row"><label id="knownLabel" for="knownInput">已知总车长 Lₐ</label><div class="number-unit"><input id="knownInput" type="number" min="500" max="50000" step="any" value="4500" aria-describedby="knownHelp"><span>mm</span></div></div>
+      <input id="knownRange" type="range" min="2500" max="6500" step="10" value="4500" aria-label="调整已知总车长，毫米">
+      <div class="range-labels"><span id="knownMin">2500 mm</span><span id="knownMax">6500 mm</span></div>
+      <p class="hint" id="knownHelp">调节 C 时，总车长保持这个值。</p>
+      <hr class="rule">
+      <div class="label-row"><label for="coefficientInput">比例系数 C</label><input id="coefficientInput" type="number" min="0.45" max="0.75" step="any" value="0.64"></div>
+      <input id="coefficientRange" type="range" min="0.45" max="0.75" step="0.001" value="0.64" aria-label="调整比例系数C">
+      <div class="range-labels"><span>0.45</span><span>0.75</span></div>
+      <div class="coefficient-scale" aria-hidden="true"><span class="scale-general"></span><span class="scale-fr"></span><span class="scale-ff"></span><i id="cMarker"></i></div>
+      <div class="legend"><span><i class="dot fr"></i>前置后驱 0.52～0.56</span><span><i class="dot"></i>前置前驱 0.62～0.66</span></div>
+      <div class="quick-c"><button data-c="0.54" aria-pressed="false"><strong>C = 0.54</strong><span>前置后驱参考</span></button><button data-c="0.64" aria-pressed="true"><strong>C = 0.64</strong><span>前置前驱参考</span></button></div>
+      <p class="c-status" id="cStatus">C 在教材“前置前驱”参考范围内。</p>
+      <p class="hint">教材一般参考范围为 0.52～0.66；本工具适当扩展滑块范围，便于观察比例变化。</p>
+      <hr class="rule">
+      <details class="split-controls"><summary>调整前、后悬的分配</summary><div class="label-row"><label for="splitRange">前悬占两悬总长</label><strong id="splitValue">50%</strong></div><input id="splitRange" type="range" min="20" max="80" step="1" value="50" aria-label="前悬占前后悬总长的百分比"><p class="hint">此项仅用于几何示意。C 决定前、后悬的总长，前后如何分配需要另外给定；不影响轴距计算。</p></details>
+      <p class="error" id="inputError" role="alert"></p>
+    </aside>
+
+    <main class="main">
+      <section class="metrics" aria-label="当前计算结果" aria-live="polite" aria-atomic="true">
+        <div class="card metric known" id="lengthMetric"><div class="label">总车长 Lₐ</div><div class="value"><span id="lengthValue">4500</span><span class="unit">mm</span></div><div class="context" id="lengthContext">当前固定的已知量</div></div>
+        <div class="card metric result" id="wheelbaseMetric"><div class="label">轴距 L</div><div class="value"><span id="wheelbaseValue">2880</span><span class="unit">mm</span></div><div class="context" id="wheelbaseContext">按比例系数 C 计算</div></div>
+        <div class="card metric"><div class="label">前、后悬总长 Lꜰ + Lʀ</div><div class="value"><span id="overhangValue">1620</span><span class="unit">mm</span></div><div class="context" id="overhangContext">占总车长的 36.0%</div></div>
+      </section>
+
+      <section class="card">
+        <div class="diagram-head"><div><h2 id="diagramTitle">保持车身总长，改变两轴间距</h2><p id="diagramSubtitle" class="small">总车长固定；C 增大时，两轴间距增大，两悬总长缩短。</p></div><span id="ratioBadge" class="pill">轴距占总车长 64.0%</span></div>
+        <div class="legend"><span><i class="dot front"></i>前悬 Lꜰ</span><span><i class="dot wheelbase"></i>轴距 L</span><span><i class="dot rear"></i>后悬 Lʀ</span></div><p class="scroll-hint">窄屏可横向查看完整车辆尺寸图。</p>
+        <div class="visual-scroll"><svg id="carSvg" class="car" viewBox="0 0 1000 355" role="img" aria-label="前悬、轴距、后悬与总车长的侧视尺寸示意"></svg></div>
+        <div class="sum-line" id="geometrySum">总车长 4500 = 前悬 810 + 轴距 2880 + 后悬 810 mm</div>
+        <div class="parts-bar" aria-hidden="true"><span id="frontPart" style="width:18%"></span><span id="wheelbasePart" style="width:64%"></span><span id="rearPart" style="width:18%"></span></div><div class="parts-labels"><span id="frontPercent">前悬 18.0%</span><span id="wheelbasePercent">轴距 64.0%</span><span id="rearPercent">后悬 18.0%</span></div>
+        <p class="hint" id="scaleNote">本模式固定总车长的绘图长度，以突出轴距变化。车身轮廓和车轮大小为教学示意。</p>
+      </section>
+
+      <div class="analysis">
+        <section class="card"><h2>总车长—轴距关系图</h2><p class="small" id="chartHelp">固定 C 时是一条过原点的直线；虚线标出当前固定的总车长。</p><p class="scroll-hint">窄屏可横向查看完整坐标图。</p><div class="visual-scroll"><svg id="relationChart" class="chart" viewBox="0 0 620 340" role="img" aria-label="轴距随总车长变化的比例关系"></svg></div><div class="legend"><span><i class="dot fr"></i>前置后驱参考区间</span><span><i class="dot"></i>前置前驱参考区间</span><span><i class="dot wheelbase"></i>当前 C 的比例线</span></div></section>
+        <section class="card insight"><h2>本次计算与观察</h2><div class="live-formula" id="liveFormula">L = C × Lₐ<br>= 0.64 × 4500 = 2880 mm</div><h3 id="trendTitle">总车长固定，C 越大，轴距越长</h3><p id="trendText">总车长不变，轴距增大多少，前、后悬的总长就缩短多少。</p><div class="change-row"><div class="change-box"><span id="lowerCLabel">C = 0.62 时</span><b id="lowerCValue">L = 2790 mm</b></div><div class="change-box"><span id="upperCLabel">C = 0.66 时</span><b id="upperCValue">L = 2970 mm</b></div></div><hr class="rule"><p id="sensitivityText">保持 C = 0.64 不变，总车长每增加 100 mm，轴距增加 64 mm。</p><p class="hint">C 取较大值表示轴距占比更高。轴距的具体选取还需结合布置空间、机动性等设计要求。</p></section>
+      </div>
+    </main>
+  </div>
+
+  <section class="references" id="references" aria-label="教材给出的比例系数参考范围">
+    <article class="card reference fr"><div class="tag">教材参考 · 发动机前置后轮驱动</div><h2>C ≈ 0.52～0.56</h2><p id="frBasis">以当前固定总车长 Lₐ = 4500 mm 计算，轴距参考区间为：</p><div class="range-result" id="frRange">2340～2520 mm</div><p class="hint">快捷值 C = 0.54 为此区间的中值，用于课堂比较。</p></article>
+    <article class="card reference ff"><div class="tag">教材参考 · 发动机前置前轮驱动</div><h2>C ≈ 0.62～0.66</h2><p id="ffBasis">以当前固定总车长 Lₐ = 4500 mm 计算，轴距参考区间为：</p><div class="range-result" id="ffRange">2790～2970 mm</div><p class="hint">快捷值 C = 0.64 为此区间的中值，用于课堂比较。</p></article>
+  </section>
+  <p class="reading-note">以上为教材中的乘用车经验参考。前置后驱与前置前驱的系数区间有助于比较布置比例；仅凭 C 的数值不能识别一辆车的驱动形式。</p>
+
+  <div class="two-tables">
+    <section class="card"><div class="section-head"><div><h2>保持当前已知尺寸，比较不同 C</h2><p id="comparisonNote">固定总车长 Lₐ = 4500 mm。</p></div><span class="small">可点击行内按钮设置 C</span></div><div class="table-scroll"><table><thead><tr><th>比例系数 C</th><th>轴距占比</th><th id="derivedColumn">计算轴距 L / mm</th><th>两悬总长 / mm</th><th>教材参考区间</th><th class="no-print">设置</th></tr></thead><tbody id="comparisonBody"></tbody></table></div></section>
+    <section class="card" aria-label="实验记录"><div class="section-head"><div><h2>实验记录</h2><p id="recordCount">记录多组参数，用于比较与课堂讨论。</p></div><div class="record-actions"><button class="btn primary" id="recordBtn">记录当前方案</button><button class="btn" id="exportBtn" disabled>导出 CSV</button><button class="btn" id="clearBtn" disabled>清空记录</button></div></div><div class="table-scroll"><table><thead><tr><th>序号</th><th>探究方式</th><th>C</th><th>总车长 / mm</th><th>轴距 / mm</th><th>前悬 / mm</th><th>后悬 / mm</th><th>两悬总长 / mm</th></tr></thead><tbody id="recordBody"><tr><td colspan="8" class="empty">调整 C 或已知尺寸后，点击“记录当前方案”。</td></tr></tbody></table></div><p class="hint">记录暂存在本页内存中，刷新页面会清空；离开前可导出。最多记录 30 组。</p><p class="small" id="recordStatus" role="status"></p></section>
+  </div>
+
+  <section class="learning" aria-label="课堂探究任务"><div><h3>同样的车长，比较轴距</h3><p>固定总车长 4500 mm，依次设 C = 0.54、0.64。轴距各是多少？两悬总长相差多少？</p></div><div><h3>同样的轴距，比较车长</h3><p>切换为固定轴距，设 L = 2800 mm。比较 C = 0.54、0.64 时的总车长，解释它们为何不同。</p></div><div><h3>把“总悬长”与“悬长分配”分开</h3><p>保持总车长和 C 不变，展开“调整前、后悬的分配”。前悬与后悬怎样变化？轴距是否改变？</p></div></section>
+
+  <details class="card model" id="modelDetails"><summary>教材出处、计算方法与适用条件</summary><div class="model-body"><div><h3>公式与符号</h3><p>教材给出乘用车总长 Lₐ = L/C，并说明 C 为比例系数。由此得 C = L/Lₐ、L = C·Lₐ。输入和输出的长度统一使用 mm，图中坐标刻度使用 m。</p><p>前、后悬总长 S = Lₐ − L = (1 − C)Lₐ。为绘制分段尺寸，额外给定前悬占两悬总长的比例 q：Lꜰ = qS，Lʀ = (1 − q)S。q 是本工具的辅助示意参数；它不属于教材给出的 C 关系式。</p><p>固定总车长时，L 随 C 线性增加；固定轴距时，Lₐ 随 C 按反比例减小。固定 C 时，L 与 Lₐ 成正比。</p></div><div><h3>教材页码与参考范围</h3><p>《汽车设计》第5版，印刷第18页；本地 PDF 的第30页。一般 C = 0.52～0.66；发动机前置前轮驱动汽车为 0.62～0.66，发动机前置后轮驱动汽车约为 0.52～0.56。</p><ul><li>本工具讨论乘用车尺寸比例，数值为几何计算与教学示例。</li><li>此关系不能单独确定前、后悬各自的长度，也不直接计算车内空间、转弯直径或通过性。</li><li>教材经验区间用于初步选型参考；本页不作车辆法规尺寸或具体车型可行性校核。</li><li>图中保持各长度段的比例关系。固定车长模式固定车身绘图长度；固定轴距模式固定两轴绘图间距。两种模式的显示比例尺分别确定。</li></ul></div></div></details>
+  <footer class="footer">广西大学 · 车辆工程专业 · 《汽车设计》课程教学工具<br>第1章 · 总车长与轴距 · V1.0 · 单文件离线版</footer>
+</div>
+<script>
+'use strict';
+const DEFAULTS = Object.freeze({mode:'length',known:4500,C:0.64,q:0.5});
+const C_MIN=0.45,C_MAX=0.75,MAX_RECORDS=30;
+let state={...DEFAULTS},records=[];
+const $=id=>document.getElementById(id);
+const fmt=(v,d=1)=>Number(v.toFixed(d)).toLocaleString('en-US',{useGrouping:false,maximumFractionDigits:d});
+const fC=v=>fmt(v,5);
+function calculate(s){
+  if(!['length','wheelbase'].includes(s.mode))throw new RangeError('未知探究方式');
+  if(!Number.isFinite(s.known)||s.known<=0||s.known>1e9)throw new RangeError('已知尺寸须大于0且不超过10⁹ mm');
+  if(!Number.isFinite(s.C)||s.C<C_MIN||s.C>C_MAX)throw new RangeError('C须在0.45～0.75之间');
+  if(!Number.isFinite(s.q)||s.q<0.2||s.q>0.8)throw new RangeError('前悬分配比例须在0.2～0.8之间');
+  const La=s.mode==='length'?s.known:s.known/s.C;
+  const L=s.mode==='length'?s.C*s.known:s.known;
+  const S=La-L,front=s.q*S,rear=(1-s.q)*S;
+  return {La,L,S,front,rear,frontRatio:front/La,rearRatio:rear/La};
+}
+function geometry(s,c){
+  const scale=s.mode==='length'?820/c.La:320/c.L;
+  const frontX=s.mode==='length'?90:340-c.front*scale;
+  const rearX=frontX+c.La*scale;
+  const frontAxle=frontX+c.front*scale,rearAxle=frontAxle+c.L*scale;
+  return {scale,frontX,rearX,frontAxle,rearAxle};
+}
+function referenceRange(s,lo,hi){
+  return s.mode==='length'?[s.known*lo,s.known*hi]:[s.known/hi,s.known/lo];
+}
+function rangeLabel(C){
+  const eps=1e-9;
+  if(C>=.62-eps&&C<=.66+eps)return '前置前驱参考区间';
+  if(C>=.52-eps&&C<=.56+eps)return '前置后驱参考区间';
+  if(C>=.52-eps&&C<=.66+eps)return '一般参考范围';
+  return '超出教材一般参考范围';
+}
+function text(id,value){$(id).textContent=value;}
+function inputsInvalid(){return !!document.querySelector('input[aria-invalid="true"]');}
+function updateActions(){$('recordBtn').disabled=inputsInvalid()||records.length>=MAX_RECORDS;}
+function syncInputs(){
+  $('knownInput').min=Math.min(500,state.known);$('knownInput').max=Math.max(50000,state.known);$('knownInput').value=Number(state.known.toFixed(6));$('coefficientInput').value=Number(state.C.toFixed(6));$('coefficientRange').value=state.C;$('splitRange').value=state.q*100;
+  $('knownInput').removeAttribute('aria-invalid');$('coefficientInput').removeAttribute('aria-invalid');text('inputError','');syncKnownRange();
+}
+function syncKnownRange(){
+  const base=state.mode==='length'?[2500,6500]:[1500,4500];
+  const min=Math.max(1,Math.min(base[0],Math.floor(state.known/100)*100));
+  const max=Math.max(base[1],Math.ceil(state.known/100)*100);
+  $('knownRange').min=min;$('knownRange').max=max;$('knownRange').value=state.known;
+  text('knownMin',fmt(min,0)+' mm');text('knownMax',fmt(max,0)+' mm');
+  $('knownRange').setAttribute('aria-label','调整已知'+(state.mode==='length'?'总车长':'轴距')+'，毫米');
+}
+function showInputError(){
+  const bad=document.querySelector('input[aria-invalid="true"]');
+  text('inputError',bad?(bad.id==='knownInput'?`已知尺寸请输入${fmt(Number($('knownInput').min))}～${fmt(Number($('knownInput').max))} mm之间的数值。`:'C请输入0.45～0.75之间的数值。')+'图形保留最近的有效结果。':'');updateActions();
+}
+function setC(value){state.C=Math.min(C_MAX,Math.max(C_MIN,value));$('coefficientInput').value=Number(state.C.toFixed(6));$('coefficientInput').removeAttribute('aria-invalid');$('coefficientRange').value=state.C;showInputError();render();}
+function setMode(mode){
+  if(mode===state.mode)return;
+  if(inputsInvalid()){text('inputError','请先修正输入数值，再切换探究方式。');return;}
+  const c=calculate(state);state.mode=mode;state.known=mode==='length'?c.La:c.L;syncInputs();render();
+}
+function render(){
+  const c=calculate(state),byLength=state.mode==='length';
+  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode)));
+  document.querySelectorAll('[data-c]').forEach(b=>b.setAttribute('aria-pressed',String(Math.abs(Number(b.dataset.c)-state.C)<1e-9)));
+  text('knownLabel',byLength?'已知总车长 Lₐ':'已知轴距 L');
+  text('knownHelp',byLength?'调节 C 时，总车长保持这个值。':'调节 C 时，轴距保持这个值。');
+  text('lengthValue',fmt(c.La));text('wheelbaseValue',fmt(c.L));text('overhangValue',fmt(c.S));
+  $('lengthMetric').className='card metric '+(byLength?'known':'result');$('wheelbaseMetric').className='card metric '+(byLength?'result':'known');
+  text('lengthContext',byLength?'当前固定的已知量':'按比例系数 C 计算');text('wheelbaseContext',byLength?'按比例系数 C 计算':'当前固定的已知量');text('overhangContext','占总车长的 '+fmt((1-state.C)*100)+'%');
+  text('ratioBadge','轴距占总车长 '+fmt(state.C*100)+'%');text('splitValue',fmt(state.q*100,0)+'%');
+  $('cMarker').style.left=(state.C-C_MIN)/(C_MAX-C_MIN)*100+'%';
+  const outside=state.C<.52-1e-9||state.C>.66+1e-9;
+  text('cStatus',outside?'C 超出教材一般参考范围，可继续作比例探究。':'C 在教材“'+rangeLabel(state.C).replace('参考区间','').replace('一般参考范围','一般')+'”参考范围内。');$('cStatus').style.color=outside?'var(--amber)':'var(--blue)';
+  text('diagramTitle',byLength?'保持车身总长，改变两轴间距':'保持两轴间距，改变车身总长');
+  text('diagramSubtitle',byLength?'总车长固定；C 增大时，两轴间距增大，两悬总长缩短。':'轴距固定；C 增大时，车身总长减小，两悬总长缩短。');
+  text('scaleNote',byLength?'本模式固定总车长的绘图长度，以突出轴距变化。车身轮廓和车轮大小为教学示意。':'本模式固定两轴的绘图间距，以突出前、后悬及车身总长的变化。车身轮廓和车轮大小为教学示意。');
+  renderCar(c);renderChart(c);
+  text('geometrySum',`总车长 ${fmt(c.La)} mm ≈ 前悬 ${fmt(c.front)} + 轴距 ${fmt(c.L)} + 后悬 ${fmt(c.rear)} mm`);
+  [['frontPart',c.frontRatio],['wheelbasePart',state.C],['rearPart',c.rearRatio]].forEach(([id,r])=>$(id).style.width=r*100+'%');
+  text('frontPercent','前悬 '+fmt(c.frontRatio*100)+'%');text('wheelbasePercent','轴距 '+fmt(state.C*100)+'%');text('rearPercent','后悬 '+fmt(c.rearRatio*100)+'%');
+  text('chartHelp','固定 C 时是一条过原点的直线；虚线标出当前固定的'+(byLength?'总车长。':'轴距。'));
+  $('liveFormula').replaceChildren();const equation=document.createTextNode(byLength?'L = C × Lₐ':'Lₐ = L / C'),detail=document.createTextNode(byLength?`= ${fC(state.C)} × ${fmt(c.La)} ≈ ${fmt(c.L)} mm`:`= ${fmt(c.L)} / ${fC(state.C)} ≈ ${fmt(c.La)} mm`);$('liveFormula').append(equation,document.createElement('br'),detail);
+  text('trendTitle',byLength?'总车长固定，C 越大，轴距越长':'轴距固定，C 越大，总车长越短');
+  text('trendText',byLength?'总车长不变，轴距增大多少，前、后悬的总长就缩短多少。':'轴距不变，车长缩短多少，前、后悬的总长就缩短多少。');
+  const lower=Math.max(C_MIN,state.C-.02),upper=Math.min(C_MAX,state.C+.02);
+  text('lowerCLabel','C = '+fC(lower)+' 时');text('upperCLabel','C = '+fC(upper)+' 时');
+  text('lowerCValue',(byLength?'L = ':'Lₐ ≈ ')+fmt(calculate({...state,C:lower})[byLength?'L':'La'])+' mm');text('upperCValue',(byLength?'L = ':'Lₐ ≈ ')+fmt(calculate({...state,C:upper})[byLength?'L':'La'])+' mm');
+  text('sensitivityText',byLength?`保持 C = ${fC(state.C)} 不变，总车长每增加 100 mm，轴距增加 ${fmt(state.C*100)} mm。`:`保持 C = ${fC(state.C)} 不变，轴距每增加 100 mm，总车长增加约 ${fmt(100/state.C)} mm。`);
+  for(const [key,lo,hi] of [['fr',.52,.56],['ff',.62,.66]]){
+    const [low,high]=referenceRange(state,lo,hi);
+    text(key+'Basis',`以当前固定${byLength?'总车长 Lₐ':'轴距 L'} = ${fmt(state.known)} mm 计算，${byLength?'轴距':'总车长'}参考区间为：`);
+    text(key+'Range',`${fmt(low)}～${fmt(high)} mm`);
+  }
+  renderComparison();updateActions();
+}
+function renderCar(c){
+  const g=geometry(state,c),{frontX:f,rearX:r,frontAxle:fa,rearAxle:ra}=g,w=r-f;
+  const body=`M${f} 211 Q${f+6} 187 ${f+w*.12} 183 L${f+w*.23} 124 Q${f+w*.26} 111 ${f+w*.32} 111 L${f+w*.66} 111 Q${f+w*.7} 113 ${f+w*.75} 140 L${f+w*.84} 179 L${r-15} 188 Q${r} 194 ${r} 211 L${r} 233 L${f} 233 Z`;
+  const windows=`M${f+w*.25} 174 L${f+w*.3} 124 L${f+w*.47} 124 L${f+w*.47} 174 Z M${f+w*.5} 124 L${f+w*.65} 124 L${f+w*.74} 174 L${f+w*.5} 174 Z`;
+  const wheel=x=>`<g><circle cx="${x}" cy="229" r="29" fill="#101722" stroke="#91a5b9" stroke-width="2"/><circle cx="${x}" cy="229" r="17" fill="#30465c" stroke="#687f96"/><circle cx="${x}" cy="229" r="5" fill="#a9bfd2"/><path d="M${x-12} 229 h24 M${x} 217 v24" stroke="#91a5b9" stroke-width="2"/></g>`;
+  const dimension=(x1,x2,y,label,color,labelAbove=true)=>`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${color}" stroke-width="1.6" marker-start="url(#dimA)" marker-end="url(#dimA)"/><text x="${(x1+x2)/2}" y="${y+(labelAbove?-10:23)}" fill="${color}" text-anchor="middle" font-size="17">${label}</text>`;
+  let svg=`<defs><marker id="dimA" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#a6b6ca" stroke-width="1.5"/></marker></defs>`;
+  svg+=`<path d="${body}" fill="#233447" stroke="#61788f" stroke-width="2"/><path d="${windows}" fill="#122333" stroke="#526e89" stroke-width="1.5"/><path d="M${f+w*.48} 184 V225 M${f+w*.76} 184 V222" stroke="#51687f"/><path d="M${f+5} 206 h18 M${r-22} 202 h16" stroke="#c1d7e8" stroke-width="4"/>${wheel(fa)}${wheel(ra)}`;
+  svg+=`<text x="${f+4}" y="94" fill="#c5d5e5" font-size="15">车头</text><text x="${r-4}" y="94" fill="#c5d5e5" text-anchor="end" font-size="15">车尾</text><line x1="${f-10}" y1="259" x2="${r+10}" y2="259" stroke="#40556a"/>`;
+  for(const x of [f,fa,ra,r])svg+=`<line x1="${x}" y1="266" x2="${x}" y2="338" stroke="#5b7188" stroke-dasharray="3 4"/>`;
+  svg+=`<line x1="${f}" y1="36" x2="${f}" y2="78" stroke="#8b9eb2"/><line x1="${r}" y1="36" x2="${r}" y2="78" stroke="#8b9eb2"/>`;
+  svg+=dimension(f,r,52,`总车长 Lₐ = ${fmt(c.La)} mm`,'#dbe8f6');
+  svg+=dimension(fa,ra,294,`轴距 L = ${fmt(c.L)} mm`,'#5ce0ca');
+  svg+=dimension(f,fa,329,`前悬 ${fmt(c.front)} mm`,'#7ab9ff',false)+dimension(ra,r,329,`后悬 ${fmt(c.rear)} mm`,'#f5c66b',false);
+  $('carSvg').innerHTML=svg;$('carSvg').setAttribute('aria-label',`总车长${fmt(c.La)}毫米，轴距${fmt(c.L)}毫米，前悬${fmt(c.front)}毫米，后悬${fmt(c.rear)}毫米，轴距占比${fmt(state.C*100)}%。`);
+}
+function renderChart(c){
+  const x0=64,x1=591,y0=27,y1=276;
+  const maxX=Math.ceil(Math.max(4000,c.La*1.15,state.mode==='wheelbase'?c.L/.52*1.05:0)/1000)*1000;
+  const maxY=Math.ceil(maxX*.75/1000)*1000;
+  const X=v=>x0+v/maxX*(x1-x0),Y=v=>y1-v/maxY*(y1-y0);
+  let svg='';
+  for(let i=0;i<=5;i++){
+    const xv=maxX*i/5,yv=maxY*i/5,x=X(xv),y=Y(yv);
+    svg+=`<line x1="${x}" y1="${y0}" x2="${x}" y2="${y1}" stroke="#344357"/><line x1="${x0}" y1="${y}" x2="${x1}" y2="${y}" stroke="#344357"/><text x="${x}" y="${y1+23}" text-anchor="middle" fill="#b2c0d1" font-size="13">${fmt(xv/1000)}</text><text x="${x0-12}" y="${y+5}" text-anchor="end" fill="#b2c0d1" font-size="13">${fmt(yv/1000)}</text>`;
+  }
+  for(const [lo,hi,color] of [[.52,.56,'#f5c66b'],[.62,.66,'#7ab9ff']])svg+=`<path d="M${x0} ${y1} L${x1} ${Y(maxX*lo)} L${x1} ${Y(maxX*hi)} Z" fill="${color}" opacity=".2"/>`;
+  const px=X(c.La),py=Y(c.L);
+  svg+=`<path d="M${x0} ${y1} L${x1} ${Y(maxX*state.C)}" fill="none" stroke="#5ce0ca" stroke-width="2.8"/>`;
+  svg+=state.mode==='length'?`<line x1="${px}" y1="${y0}" x2="${px}" y2="${y1}" stroke="#b5c8d9" stroke-dasharray="5 5"/>`:`<line x1="${x0}" y1="${py}" x2="${x1}" y2="${py}" stroke="#b5c8d9" stroke-dasharray="5 5"/>`;
+  svg+=`<circle cx="${px}" cy="${py}" r="6" fill="#101722" stroke="#5ce0ca" stroke-width="3"/><text x="${x0+12}" y="${y0+21}" fill="#5ce0ca" font-size="15">当前 C = ${fC(state.C)}</text><text x="${x0}" y="17" fill="#b2c0d1" font-size="14">轴距 L / m</text><text x="${x1}" y="${y1+52}" text-anchor="end" fill="#b2c0d1" font-size="14">总车长 Lₐ / m</text>`;
+  $('relationChart').innerHTML=svg;$('relationChart').setAttribute('aria-label',`当前比例线L等于${fC(state.C)}倍总车长。当前点总车长${fmt(c.La)}毫米，轴距${fmt(c.L)}毫米；${state.mode==='length'?'总车长':'轴距'}保持固定。`);
+}
+function renderComparison(){
+  const body=$('comparisonBody');body.replaceChildren();
+  const byLength=state.mode==='length';text('comparisonNote',`固定${byLength?'总车长 Lₐ':'轴距 L'} = ${fmt(state.known)} mm。`);text('derivedColumn',byLength?'计算轴距 L / mm':'计算总车长 Lₐ / mm');
+  for(const C of [.52,.54,.56,.59,.62,.64,.66]){
+    const c=calculate({...state,C}),tr=document.createElement('tr');if(Math.abs(C-state.C)<1e-9)tr.className='current';
+    [fC(C),fmt(C*100)+'%',fmt(byLength?c.L:c.La),fmt(c.S),rangeLabel(C)].forEach(value=>{const td=document.createElement('td');td.textContent=value;tr.append(td);});
+    const td=document.createElement('td'),b=document.createElement('button');td.className='no-print';b.className='table-btn';b.textContent='设 C = '+fC(C);b.addEventListener('click',()=>setC(C));td.append(b);tr.append(td);body.append(tr);
+  }
+}
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+document.querySelectorAll('[data-c]').forEach(b=>b.addEventListener('click',()=>setC(Number(b.dataset.c))));
+$('knownInput').addEventListener('input',event=>{
+  const v=event.target.valueAsNumber;
+  if(!Number.isFinite(v)||v<Number(event.target.min)||v>Number(event.target.max)){event.target.setAttribute('aria-invalid','true');showInputError();return;}
+  event.target.removeAttribute('aria-invalid');state.known=v;syncKnownRange();showInputError();render();
+});
+$('knownRange').addEventListener('input',event=>{state.known=Number(event.target.value);$('knownInput').value=state.known;$('knownInput').removeAttribute('aria-invalid');showInputError();render();});
+$('coefficientInput').addEventListener('input',event=>{
+  const v=event.target.valueAsNumber;if(!Number.isFinite(v)||v<C_MIN||v>C_MAX){event.target.setAttribute('aria-invalid','true');showInputError();return;}event.target.removeAttribute('aria-invalid');setC(v);
+});
+$('coefficientRange').addEventListener('input',event=>setC(Number(event.target.value)));
+$('splitRange').addEventListener('input',event=>{state.q=Number(event.target.value)/100;render();});
+$('resetBtn').addEventListener('click',()=>{state={...DEFAULTS};syncInputs();render();text('recordStatus','已恢复初始参数，已有实验记录继续保留。');});
+function renderRecords(){
+  const body=$('recordBody');body.replaceChildren();
+  if(!records.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=8;td.className='empty';td.textContent='调整 C 或已知尺寸后，点击“记录当前方案”。';tr.append(td);body.append(tr);}
+  records.forEach(({settings:s,result:c},i)=>{const tr=document.createElement('tr');[i+1,s.mode==='length'?'固定总车长':'固定轴距',fC(s.C),fmt(c.La),fmt(c.L),fmt(c.front),fmt(c.rear),fmt(c.S)].forEach(value=>{const td=document.createElement('td');td.textContent=value;tr.append(td);});body.append(tr);});
+  $('exportBtn').disabled=!records.length;$('clearBtn').disabled=!records.length;text('recordCount',records.length?`已记录 ${records.length} / ${MAX_RECORDS} 组方案。`:'记录多组参数，用于比较与课堂讨论。');updateActions();
+}
+$('recordBtn').addEventListener('click',()=>{if(inputsInvalid()||records.length>=MAX_RECORDS)return;records.push({settings:{...state},result:calculate(state)});renderRecords();text('recordStatus',`已记录第 ${records.length} 组方案。`);});
+$('clearBtn').addEventListener('click',()=>{records=[];renderRecords();text('recordStatus','记录已清空。');});
+function csvContent(items){
+  const rows=[['序号','探究方式','已知尺寸(mm)','比例系数C','轴距占比','总车长La(mm)','轴距L(mm)','前悬LF(mm)','后悬LR(mm)','两悬总长(mm)','前悬占两悬总长比例q']];
+  items.forEach(({settings:s,result:c},i)=>rows.push([i+1,s.mode==='length'?'固定总车长':'固定轴距',s.known,s.C,s.C,c.La.toFixed(6),c.L.toFixed(6),c.front.toFixed(6),c.rear.toFixed(6),c.S.toFixed(6),s.q]));
+  return '\uFEFF'+rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+}
+$('exportBtn').addEventListener('click',()=>{if(!records.length)return;const url=URL.createObjectURL(new Blob([csvContent(records)],{type:'text/csv;charset=utf-8;'})),link=document.createElement('a');link.href=url;link.download='总车长与轴距-实验记录.csv';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);text('recordStatus','已导出实验记录 CSV。');});
+let detailsBeforePrint=false;
+window.addEventListener('beforeprint',()=>{detailsBeforePrint=$('modelDetails').open;$('modelDetails').open=true;});
+window.addEventListener('afterprint',()=>{$('modelDetails').open=detailsBeforePrint;});
+$('printBtn').addEventListener('click',()=>window.print());
+syncInputs();render();renderRecords();
+</script>
+</body>
+</html>
